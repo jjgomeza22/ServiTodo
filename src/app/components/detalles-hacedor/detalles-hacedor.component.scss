@@ -1,0 +1,69 @@
+.detallesHacedor-container-grid{
+  display: grid;
+  grid-template-rows: 10% 90%;
+  background-color: rgb(88, 88, 88);
+  width: 100%;
+  height: 100%;
+}
+.detallesHacedor-container-grid h2{
+  margin: 0;
+  justify-self: center;
+  align-self: center;
+}
+.detallesHacedor-container-form{
+
+  text-align-last: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  height: 80%;
+  border:1px solid #c2185b;
+  align-self: center;
+  justify-self: center;
+}
+
+.detallesHacedor-container{
+  display: grid;
+  grid-template-columns: 40% 40% 20%;
+  border:1px solid #c2185b;
+  width: 80%;
+  height: 80%;
+  align-self: center;
+  justify-self: center;
+}
+
+.detallesHacedor-container-habilidades{
+  display: flex;
+  flex-direction: column;
+  text-align-last: center;
+  justify-content: center;
+  place-items: center;
+  width: 80%;
+  height: 80%;
+  border:1px solid #c2185b;
+  align-self: center;
+  justify-self: center;
+}
+
+.detallesHacedor-container-habilidades h2{
+  margin-bottom: 40px;
+}
+
+.formulario-detalles{
+  display: flex;
+  flex-direction: column;
+}
+
+.formulario-detalles .check{
+  margin-bottom: 30px;
+}
+
+.container-button{
+  width: 90%;
+  align-self: center;
+}
+
+.container-button button{
+  width: 100%;
+}

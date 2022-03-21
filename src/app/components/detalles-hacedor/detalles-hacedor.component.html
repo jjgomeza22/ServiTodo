@@ -1,0 +1,52 @@
+<div class="detallesHacedor-container-grid">
+  <h2>Registrar Detalles Hacedor</h2>
+  <div class="detallesHacedor-container">
+    <div class="detallesHacedor-container-form">
+      <form [formGroup]="formDetalles" class="formulario-detalles">
+        <mat-checkbox formControlName="modificarDetalles"
+        (ngModelChange)="checkBox($event)" class="check">ModificarDetalles
+      </mat-checkbox>
+
+        <!-- Número de contacto -->
+        <mat-form-field appearance="outline">
+          <mat-label>Numero de contacto (cel)</mat-label>
+          <input
+            id="numeroContacto"
+            maxlength="10"
+            matInput
+            formControlName="numeroContacto"
+          />
+        </mat-form-field>
+
+        <!-- hacedor: Rango de trabajo -->
+        <mat-form-field appearance="outline">
+          <mat-label>Descripción de tu rango de trabajo</mat-label>
+          <input
+            id="rangoTrabajo"
+            matInput
+            formControlName="rangoTrabajo"
+            type="text"
+          />
+        </mat-form-field>
+        <button mat-raised-button type="submit" [disabled]="actForm" (click)="actDatos()">Actualizar Datos</button>
+      </form>
+    </div>
+    <div class="detallesHacedor-container-habilidades">
+      <h2>Selecciona la habilidad que <br>quieres agregar</h2>
+      <!-- Hacedor: Disponibilidad -->
+      <form [formGroup]="formHabilidad" class="formulario-detalles">
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona la habilidad</mat-label>
+          <mat-select [formControlName]="'habilidad'">
+            <mat-option [value]="habilidad.nombre" *ngFor="let habilidad of habilidads">{{habilidad.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button type="submit" (click)="enviarHabilidad()">Agregar Habilidad</button>
+      </form>
+    </div>
+    <div class="container-button">
+      <p><strong>Da click en el boton "Ofertas" para conocer las ofertas disponibles</strong></p>
+      <button mat-raised-button type="button" (click)="irOfertas()">Ofertas</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="container-formulario-ingresar">
+  <div class="container-formulario">
+    <h2>Solicitar Oferta</h2>
+    <form [formGroup]="form" class="formulario-ingresar">
+      <!-- direccion field -->
+      <mat-form-field appearance="outline">
+        <mat-label>Ingresa tu dirección</mat-label>
+        <input id="direccion" matInput formControlName="direccion">
+      </mat-form-field>
+
+      <!-- Habilitar oferta -->
+      <mat-form-field appearance="outline">
+        <mat-label>Habilitar oferta</mat-label>
+        <mat-select [formControlName]="'habilitar'">
+          <mat-option value="habilitar">Habilitar</mat-option>
+          <mat-option value="deshabilitar">Deshabilitar</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Fecha -->
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha</mat-label>
+        <input id="fecha" matInput type="datetime-local" [formControlName]="'fecha'">
+      </mat-form-field>
+
+        <!-- Precio -->
+        <mat-form-field appearance="outline">
+          <mat-label>Precio</mat-label>
+          <input id="precio" matInput type="number" [formControlName]="'precio'">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona el servicio requerido</mat-label>
+          <mat-select [formControlName]="'servicio'">
+            <mat-option [value]="servicio.nombre" *ngFor="let servicio of servicios">{{servicio.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      <button mat-raised-button type="button" (click)="enviarOferta()">Enviar</button>
+    </form>
+  </div>
+  <div class="container-servicios-hacedores">
+    <h2>Ver detalles</h2>
+    <form [formGroup]="formCon" class="formulario-ingresar">
+      <mat-form-field appearance="outline">
+        <mat-label>Selecciona el hacedor a inspeccionar</mat-label>
+        <mat-select [formControlName]="'hacedor'">
+          <mat-option [value]="hacedor.hacedorID" *ngFor="let hacedor of hacedores">{{hacedor.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button class="button-lina" mat-raised-button (click)="openDialogHacedores()">Consultar Hacedor</button>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Selecciona el servicio a inspeccionar</mat-label>
+        <mat-select [formControlName]="'servicioCon'">
+          <mat-option [value]="servicio.servicioID" *ngFor="let servicio of servicios">{{servicio.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button (click)="openDialogService()">Consultar Servicio</button>
+
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Servicios Aceptados</mat-label>
+        <mat-select [formControlName]="'servicioCon'">
+          <mat-option [value]="oferta.ofertaID" *ngFor="let oferta of ofertasAcept">{{oferta.ofertaID}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button (click)="openDialogService()">Consultar Servicio</button> -->
+    </form>
+  </div>
+</div>

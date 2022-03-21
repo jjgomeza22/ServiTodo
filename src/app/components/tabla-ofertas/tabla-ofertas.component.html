@@ -1,0 +1,35 @@
+<div class="principal-container">
+  <div class="table-container">
+    <table>
+      <thead class="head-table">
+        <tr>
+          <th>
+            Nombre de la oferta
+          </th>
+          <th>
+            descripción
+          </th>
+          <th>
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody class="body-table">
+        <tr class="tr-table" *ngFor="let oferta of ofertasMos">
+          <td>{{oferta.nombre}}</td>
+          <td>{{oferta.descripcion}}</td>
+          <td>
+            <div class="container-button">
+              <button mat-icon-button (click)="aceptarOferta(oferta.ofertaID)">
+                <mat-icon> check_circle</mat-icon>
+              </button>
+              <button mat-icon-button>
+                <mat-icon> cancel</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

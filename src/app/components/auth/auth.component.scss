@@ -1,0 +1,24 @@
+.container-formulario-ingresar {
+  padding-top: 100px;
+  margin: 0 auto;
+  width: 70%;
+}
+
+.formulario-ingresar{
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.formulario-ingresar-reg{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.formulario-ingresar-reg mat-form-field{
+  width: 45%;
+}

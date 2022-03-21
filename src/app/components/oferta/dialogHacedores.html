@@ -1,0 +1,12 @@
+<h1 mat-dialog-title><strong>Información del hacedor:</strong> {{hacedor.nombre}} {{hacedor.apellido}}</h1>
+<div mat-dialog-content>
+  <span><strong>Direccion:</strong> {{hacedor.direccion}}<br> </span>
+  <span><strong>Rango de trabajo:</strong> {{hacedor.rangoTrabajo}}<br> </span>
+  <!-- <ng-container *ngFor="let habilidad of hacedor.habilidades">
+    <span >Habilidades: {{habilidad}}</span>
+  </ng-container> -->
+  <span><strong>Numero de contacto:</strong> {{hacedor.numeroContacto}}<br> </span>
+</div>
+<div style="place-content:end" mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>Cerrar</button>
+</div>

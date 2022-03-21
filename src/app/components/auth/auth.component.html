@@ -1,0 +1,121 @@
+<mat-tab-group mat-align-tabs="center" [selectedIndex]="selectI">
+  <mat-tab label="Ingresar">
+    <div class="container-formulario-ingresar">
+      <form [formGroup]="form" class="formulario-ingresar">
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona tu rol</mat-label>
+          <mat-select [formControlName]="'rol'">
+            <mat-option value="cliente">Cliente</mat-option>
+            <mat-option value="hacedor">Hacedor</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Correo electronico -->
+        <mat-form-field appearance="outline">
+          <mat-label>Correo Electrónico</mat-label>
+          <input id="email" matInput formControlName="email">
+          <!-- <mat-error
+              *ngIf="form.get('email').hasError('required')">
+              <mat-icon svgIcon="mat_solid:error_outline"></mat-icon>
+              <span>{{t('msg.emailRequired')}}</span>
+          </mat-error>
+          <mat-error
+              *ngIf="form.get('email').hasError('email')">
+              <mat-icon svgIcon="mat_solid:error_outline"></mat-icon>
+              <span>{{t('msg.signInValidEmail')}}</span>
+          </mat-error> -->
+      </mat-form-field>
+
+      <!-- Password field -->
+      <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input id="password" matInput type="password" [formControlName]="'password'"
+              #passwordField>
+          <mat-error>
+              <!-- <mat-icon svgIcon="mat_solid:error_outline"></mat-icon> -->
+              <span>La contraseña es requerida</span>
+          </mat-error>
+      </mat-form-field>
+      <button mat-raised-button type="submit" (click)="ingresar()">Ingresar</button>
+      </form>
+    </div>
+  </mat-tab>
+  <!--------------------------------Fomulario Registro----------------------------------------->
+  <mat-tab label="Registrarse">
+    <div class="container-formulario-ingresar">
+      <form [formGroup]="formReg" class="formulario-ingresar-reg">
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona tu rol</mat-label>
+          <mat-select [formControlName]="'rolReg'" (ngModelChange)="onChanges($event)">
+            <mat-option value="cliente">Cliente</mat-option>
+            <mat-option value="hacedor">Hacedor</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Nombre -->
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input id="nombre" matInput type="text" [formControlName]="'nombre'">
+        </mat-form-field>
+
+        <!-- Apellido -->
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido</mat-label>
+          <input id="apellido" matInput type="text" formControlName="apellido">
+        </mat-form-field>
+
+        <!-- Nombre Usuario -->
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre de usuario</mat-label>
+          <input id="nombreUsuario" matInput type="text" formControlName="nombreUsuario">
+        </mat-form-field>
+
+        <!-- Password field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input id="passwordReg" matInput type="password" [formControlName]="'passwordReg'"
+            #passwordField>
+          <mat-error>
+            <!-- <mat-icon svgIcon="mat_solid:error_outline"></mat-icon> -->
+            <span>La contraseña es requerida</span>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Correo electronico -->
+        <mat-form-field appearance="outline">
+          <mat-label>Correo Electrónico</mat-label>
+          <input id="emailReg" matInput formControlName="emailReg" type="email">
+        </mat-form-field>
+
+        <!-- Número de contacto -->
+        <mat-form-field appearance="outline">
+          <mat-label>Numero de contacto (cel)</mat-label>
+          <input id="numeroContacto" maxlength="10" matInput formControlName="numeroContacto">
+        </mat-form-field>
+
+        <!-- dirección -->
+        <mat-form-field appearance="outline">
+          <mat-label>Direccion (cel)</mat-label>
+          <input id="direccion" matInput formControlName="direccion" type="text">
+        </mat-form-field>
+
+        <!-- Hacedor: Disponibilidad -->
+        <mat-form-field appearance="outline" *ngIf="activeH">
+          <mat-label>Selecciona si estas disponible</mat-label>
+          <mat-select [formControlName]="'disponibilidad'">
+            <mat-option value="disponible">Disponible</mat-option>
+            <mat-option value="ocupado">Ocupado</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- hacedor: Rango de trabajo -->
+        <mat-form-field appearance="outline" *ngIf="activeH">
+          <mat-label>Descripción de tu rango de trabajo</mat-label>
+          <input id="rangoTrabajo" matInput formControlName="rangoTrabajo" type="text">
+        </mat-form-field>
+
+      <button mat-raised-button type="submit" [disabled]="formReg.invalid" (click)="registrar()">Registrarse</button>
+      </form>
+    </div>
+  </mat-tab>
+</mat-tab-group>
