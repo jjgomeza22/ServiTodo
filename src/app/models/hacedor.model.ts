@@ -9,7 +9,12 @@ export interface Hacedor{
   direccion: string,
   disponibilidad: boolean,
   rangoTrabajo: string,
-  habilidades: Object[] | null
+  habilidades: [
+    {
+    hacedorID: number,
+    habilidadID: number
+    }
+  ]
 }
 
 export interface CrearHacedor extends Omit<Hacedor, 'hacedorID' | 'habilidades'>{

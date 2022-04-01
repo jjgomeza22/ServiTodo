@@ -10,4 +10,5 @@ export const appRoutes: Route[] = [
   {path: 'oferta', component: OfertaComponent},
   {path: 'detalles-hacedor', component: DetallesHacedorComponent},
   {path: 'tabla-ofertas', component: TablaOfertasComponent},
+  {path: 'vista-administrador', component: TablaOfertasComponent},
 ]

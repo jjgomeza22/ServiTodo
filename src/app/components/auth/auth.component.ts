@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente, CrearCliente } from 'src/app/models/cliente.model';
 import { CrearHacedor, Hacedor } from 'src/app/models/hacedor.model';
 import { ClienteService } from '../../services/cliente.service';
@@ -48,7 +48,10 @@ export class AuthComponent implements OnInit {
     disponibilidad: false,
     rangoTrabajo: '',
     habilidades: [
-      {},
+      {
+        hacedorID: 0,
+        habilidadID: 0
+      },
     ]
   };
 
@@ -78,6 +81,7 @@ export class AuthComponent implements OnInit {
     private formBuilder: FormBuilder,
     private clienteService: ClienteService,
     private hacedorService: HacedorService,
+    private activatedRoute: ActivatedRoute,
     private router: Router
   ) { }
 
@@ -116,8 +120,12 @@ export class AuthComponent implements OnInit {
       this.clienteService.login(this.email)
         .subscribe(data => {
           this.cliente = data;
-          if (this.cliente.email == this.email) {
-            this.router.navigate(["/oferta"], {});
+          if (this.cliente.contrasena == this.password) {
+            this.router.navigate(["/oferta"], {
+              queryParams: {
+                clienteID: data.clienteID
+              }
+            });
           }
         });
     }
@@ -125,8 +133,12 @@ export class AuthComponent implements OnInit {
       this.hacedorService.login(this.email)
         .subscribe(data => {
           this.hacedor = data;
-          if (this.hacedor.email == this.email) {
-            this.router.navigate(["/detalles-hacedor"], {});
+          if (this.hacedor.contrasena == this.password) {
+            this.router.navigate(["/detalles-hacedor"], {
+              queryParams: {
+                hacedorID: data.hacedorID
+              }
+            });
           }
         });
     }
@@ -159,7 +171,7 @@ export class AuthComponent implements OnInit {
       rangoTrabajo: this.formReg.get('rangoTrabajo')?.value,
     }
     if (this.formReg.get('rolReg')?.value === 'hacedor') {
-      console.log(this.newHacedor);
+      // console.log(this.newHacedor);
       this.hacedorService.registrar(this.newHacedor);
     }
     this.tabGroup.selectedIndex = 0;

@@ -19,6 +19,14 @@ export interface SolicitudOferta extends Omit<Oferta, 'ofertaID' | 'hacedorID' |
   precio: number
 }
 
+export interface OfertasAcep{
+  nombre: string,
+  descripcion: string,
+  ofertaID: number,
+  precio: number,
+  aceptada: boolean
+}
+
 export interface AceptOferta{
   hacedorID: number,
   aceptado: boolean

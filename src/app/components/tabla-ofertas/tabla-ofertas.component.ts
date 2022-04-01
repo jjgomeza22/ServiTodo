@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
-import { Hacedor } from 'src/app/models/hacedor.model';
+import { ActivatedRoute } from '@angular/router';
 import { AceptOferta, Oferta } from 'src/app/models/oferta.model';
 import { Servicio } from 'src/app/models/servicio.model';
 import { HacedorService } from 'src/app/services/hacedor.service';
@@ -17,18 +16,19 @@ export class TablaOfertasComponent implements OnInit {
   ofertas: Oferta[] = [];
   servicios: Servicio[] = [];
   ofertasMos: any[] = [];
-  hacedorID: number = 0;
+  hacedorID: any = 0;
 
   constructor(
     private ofertaService: OfertaService,
     private servicioService: ServicioService,
-    private hacedorService: HacedorService
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.traerOfertas();
     this.traerServicios();
-    this.enviarHacedor();
+    // this.findServiciosById();
+    this.hacedorID = this.activatedRoute.snapshot.queryParamMap.get("hacedorID");
   }
   traerOfertas(){
     this.ofertaService.ofertasHacedores()
@@ -49,22 +49,15 @@ export class TablaOfertasComponent implements OnInit {
   }
 
   findServiciosById(){
+
     this.ofertas.forEach(oferta => {
       const change = this.servicios.find(servicio => servicio.servicioID === oferta.servicioID);
       this.ofertasMos.push({
         nombre: change?.nombre,
         descripcion: change?.descripcion,
-        ofertaID: oferta.ofertaID
+        ofertaID: oferta.ofertaID,
+        precio: oferta.precio
       })
-      // console.log(change?.nombre);
-    });
-    // const servicio =  this.servicios.find(servicio => servicio.servicioID === )
-  }
-
-  enviarHacedor(){
-    this.hacedorService.sendHacedor$.subscribe(data => {
-      this.hacedorID = data.hacedorID;
-      console.log(data);
     });
   }
 
@@ -73,8 +66,15 @@ export class TablaOfertasComponent implements OnInit {
       hacedorID: this.hacedorID,
       aceptado: true
     }
-    console.log(aceptOfert);
+    // console.log(aceptOfert);
 
     this.ofertaService.aceptarSolicitud(aceptOfert, ofertaID);
+    const ofertaDelete = this.ofertasMos.findIndex(oferta => oferta.ofertaID === ofertaID);
+    this.ofertasMos.splice(ofertaDelete, 1);
+  }
+
+  rechazarOferta(ofertaID: number){
+    const ofertaDelete = this.ofertasMos.findIndex(oferta => oferta.ofertaID === ofertaID);
+    this.ofertasMos.splice(ofertaDelete, 1);
   }
 }

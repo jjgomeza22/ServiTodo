@@ -5,7 +5,7 @@ import { EnvHabilidad, Habilidad } from 'src/app/models/habilidad.model';
 import { HacedorService } from '../../services/hacedor.service';
 import { HabilidadService } from '../../services/habilidad.service';
 import { HacedorHabilidadService} from '../../services/hacedor-habilidad.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-detalles-hacedor',
@@ -36,13 +36,14 @@ export class DetallesHacedorComponent implements OnInit {
     hacedorID: 0
   }
 
-  hacedorID: number = 0;
+  hacedorID: any = 0;
 
   constructor(
     private formBuilder: FormBuilder,
     private hacedorService: HacedorService,
     private habilidadService: HabilidadService,
     private hacedorHabilidadService: HacedorHabilidadService,
+    private activatedRoute: ActivatedRoute,
     private router: Router
   ) { }
 
@@ -59,9 +60,11 @@ export class DetallesHacedorComponent implements OnInit {
 
     this.habilidades();
 
-    this.hacedorService.sendHacedor$.subscribe(hacedor => {
-      this.hacedorID = hacedor.hacedorID;
-    })
+    // this.hacedorService.sendHacedor$.subscribe(hacedor => {
+    //   this.hacedorID = hacedor.hacedorID;
+    // })
+    this.hacedorID = this.activatedRoute.snapshot.queryParamMap.get("hacedorID");
+
   }
 
   checkBox(event: boolean){
@@ -84,7 +87,7 @@ export class DetallesHacedorComponent implements OnInit {
       rangoTrabajo: this.formDetalles.get('rangoTrabajo')?.value
     }
     this.formDetalles.controls['modificarDetalles'].setValue(false);
-    this.hacedorService.registrarDetalles(this.detallesH);
+    this.hacedorService.registrarDetalles(this.detallesH, this.hacedorID);
   }
 
   habilidades(){
@@ -104,6 +107,10 @@ export class DetallesHacedorComponent implements OnInit {
   }
 
   irOfertas(){
-    this.router.navigate(["/tabla-ofertas"], {});
+    this.router.navigate(["/tabla-ofertas"], {
+      queryParams:{
+        hacedorID: this.hacedorID
+      }
+    });
   }
 }

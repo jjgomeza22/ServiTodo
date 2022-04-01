@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http'
+import {HttpClient} from '@angular/common/http';
 import { SolicitudOferta, Oferta, AceptOferta } from '../models/oferta.model';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class OfertaService {
 
   registar(oferta: SolicitudOferta){
     return this.http.post<Oferta>(`${this.api_url}/registrar`, oferta)
-    .subscribe(data => console.log(data)
+    .subscribe(data => data
     );
   }
 

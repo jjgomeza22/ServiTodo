@@ -22,7 +22,10 @@ export class HacedorService {
     disponibilidad: false,
     rangoTrabajo: '',
     habilidades: [
-      {},
+      {
+        hacedorID: 0,
+        habilidadID: 0
+      },
     ]
   }
 
@@ -38,7 +41,10 @@ export class HacedorService {
     disponibilidad: false,
     rangoTrabajo: '',
     habilidades: [
-      {},
+      {
+        hacedorID: 0,
+        habilidadID: 0
+      },
     ]
   });
 
@@ -61,13 +67,13 @@ export class HacedorService {
 
     registrar(newHacedor: CrearHacedor){
       return this.http.post<Hacedor>(`${this.api_url}/registrar`, newHacedor)
-      .subscribe(data => console.log(data)
+      .subscribe(data => data //console.log(data)
       );
     }
 
-    registrarDetalles(detalles: DetallesH){
-      return this.http.put<Hacedor>(`${this.api_url}/registrarDetalles/${this.hacedor.hacedorID}`, detalles)
-      .subscribe(data => console.log(data)
+    registrarDetalles(detalles: DetallesH, hacedorID: number){
+      return this.http.put<Hacedor>(`${this.api_url}/registrarDetalles/${hacedorID}`, detalles)
+      .subscribe(data => data //console.log(data)
       )
     }
 

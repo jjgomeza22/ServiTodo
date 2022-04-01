@@ -49,7 +49,7 @@ export class ClienteService {
 
   registrar(newCliente: CrearCliente){
     return this.http.post<Cliente>(`${this.api_url}/registrar`, newCliente)
-    .subscribe(data => console.log(data)
+    .subscribe(data => data //console.log(data)
     );
   }
 }

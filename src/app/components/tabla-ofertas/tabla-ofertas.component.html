@@ -10,6 +10,9 @@
             descripción
           </th>
           <th>
+            precio
+          </th>
+          <th>
             Acciones
           </th>
         </tr>
@@ -18,12 +21,13 @@
         <tr class="tr-table" *ngFor="let oferta of ofertasMos">
           <td>{{oferta.nombre}}</td>
           <td>{{oferta.descripcion}}</td>
+          <td>{{oferta.precio}}</td>
           <td>
             <div class="container-button">
               <button mat-icon-button (click)="aceptarOferta(oferta.ofertaID)">
                 <mat-icon> check_circle</mat-icon>
               </button>
-              <button mat-icon-button>
+              <button mat-icon-button (click)="rechazarOferta(oferta.ofertaID)">
                 <mat-icon> cancel</mat-icon>
               </button>
             </div>

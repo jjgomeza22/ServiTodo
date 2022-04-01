@@ -1,14 +1,16 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Oferta, SolicitudOferta } from 'src/app/models/oferta.model';
+import { Oferta, OfertasAcep, SolicitudOferta } from 'src/app/models/oferta.model';
 import { Servicio } from 'src/app/models/servicio.model';
-import {ServicioService} from '../../services/servicio.service'
-import {OfertaService} from '../../services/oferta.service';
+import { ServicioService } from '../../services/servicio.service'
+import { OfertaService } from '../../services/oferta.service';
 import { ClienteService } from 'src/app/services/cliente.service';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HacedorService } from 'src/app/services/hacedor.service';
 import { Hacedor } from 'src/app/models/hacedor.model';
+import { HabilidadService } from '../../services/habilidad.service';
+import { Habilidad } from 'src/app/models/habilidad.model';
 
 
 @Component({
@@ -18,12 +20,41 @@ import { Hacedor } from 'src/app/models/hacedor.model';
 })
 export class OfertaComponent implements OnInit {
 
-  form!: FormGroup;
-  formCon!: FormGroup;
+  form: FormGroup;
+  formCon: FormGroup;
+  formCon1: FormGroup;
+  formCon2: FormGroup;
   servicios: Servicio[] = [];
-  clienteID: number = 0;
+  clienteID: any = 0;
   hacedores: Hacedor[] = [];
   ofertasAcept: Oferta[] = [];
+  hacedor: Hacedor = {
+    hacedorID: 0,
+    nombre: '',
+    apellido: '',
+    nombreUsuario: '',
+    contrasena: '',
+    email: '',
+    numeroContacto: '',
+    direccion: '',
+    disponibilidad: false,
+    rangoTrabajo: '',
+    habilidades: [
+      {
+        hacedorID: 0,
+        habilidadID: 0
+      },
+    ]
+  };
+
+  // habilidads!: Habilidad[];
+  habilidads: Habilidad[] = [{
+    habilidadID: 0,
+    nombre: '',
+    descripcion: ''
+  }];
+
+  ofertasMos: OfertasAcep[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,8 +62,9 @@ export class OfertaComponent implements OnInit {
     private ofertaService: OfertaService,
     private hacedorService: HacedorService,
     private clienteService: ClienteService,
+    private habilidadService: HabilidadService,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -45,34 +77,44 @@ export class OfertaComponent implements OnInit {
     });
 
     this.formCon = this.formBuilder.group({
-      hacedor:['', Validators.required],
-      servicioCon:['', Validators.required]
+      hacedor: ['', Validators.required],
+    });
+
+    this.formCon1 = this.formBuilder.group({
+      servicioCon: ['', Validators.required]
+    });
+
+    this.formCon2 = this.formBuilder.group({
+      serviciosAceptados: ['', Validators.required]
     });
 
     this.consultarServicios();
-    this.clienteService.sendCliente$.subscribe(cliente => {
-      this.clienteID = cliente.clienteID;
-    });
+    this.clienteID = this.activatedRoute.snapshot.queryParamMap.get("clienteID");
 
     this.traerHacedores();
+    this.habilidades();
     this.ofertasAceptadas();
+  }
+
+  habilidades() {
+    this.habilidadService.consultar()
+      .subscribe(data => {
+        this.habilidads = data
+      });
   }
 
   openDialogHacedores() {
     const hacedorID = this.formCon.get('hacedor')?.value;
-    const hacedor = this.hacedores.find(hacedor => hacedor.hacedorID === hacedorID);
-
-    // console.log(hacedor);
-
+    this.hacedor = this.hacedores.find(hacedor => hacedor.hacedorID === hacedorID);
 
     this.dialog.open(DialogHacedores, {
-      data: hacedor
+      data: this.hacedor
     });
   }
 
   openDialogService() {
 
-    const servicioID = this.formCon.get('servicioCon')?.value;
+    const servicioID = this.formCon1.get('servicioCon')?.value;
     const servicio = this.servicios.find(servicio => servicio.servicioID === servicioID);
 
     // console.log(servicio);
@@ -82,17 +124,25 @@ export class OfertaComponent implements OnInit {
     });
   }
 
-  consultarServicios(){
-    this.servicioService.servicios()
-    .subscribe(data => {
-      data.map(servicio => {
-        this.servicios.push(servicio);
-      });
+  openDialogServiciosAceptados() {
+    const ofertaAceptID = this.formCon2.get('serviciosAceptados')?.value;
+    const ofertaAcept = this.ofertasMos.find(oferta => oferta.ofertaID === ofertaAceptID);
+
+    this.dialog.open(DialogOfertas, {
+      data: ofertaAcept,
     });
   }
 
-  enviarOferta(){
-    const servi =  this.servicios.find(servicio => servicio.nombre === this.form.get('servicio')?.value);
+  consultarServicios() {
+    this.servicioService.servicios()
+      .subscribe(data => {
+        this.servicios = data;
+        // console.log(data);
+      });
+  }
+
+  enviarOferta() {
+    const servi = this.servicios.find(servicio => servicio.nombre === this.form.get('servicio')?.value);
 
     const oferta: SolicitudOferta = {
       clienteID: this.clienteID,
@@ -103,24 +153,40 @@ export class OfertaComponent implements OnInit {
       precio: this.form.get('precio')?.value
     }
 
-    console.log(oferta);
+    // console.log(oferta);
 
     this.ofertaService.registar(oferta);
   }
 
-  traerHacedores(){
+  traerHacedores() {
     this.hacedorService.consultarHacedores()
-    .subscribe(data => {
-      console.log(data);
-      this.hacedores = data;
-    })
+      .subscribe(data => {
+        // console.log(data);
+        this.hacedores = data;
+      })
   }
 
-  ofertasAceptadas(){
+  ofertasAceptadas() {
     this.ofertaService.ofertasAceptadas()
-    .subscribe(data => {
-      this.ofertasAcept = data;
-    })
+      .subscribe(data => {
+        this.ofertasAcept = data;
+        this.findServiciosById();
+
+      })
+  }
+
+  findServiciosById() {
+
+    this.ofertasAcept.forEach(oferta => {
+      const change = this.servicios.find(servicio => servicio.servicioID === oferta.servicioID);
+      this.ofertasMos.push({
+        nombre: change.nombre,
+        descripcion: change.descripcion,
+        ofertaID: oferta.ofertaID,
+        precio: oferta.precio,
+        aceptada: oferta.aceptado
+      })
+    });
   }
 }
 @Component({
@@ -130,8 +196,8 @@ export class OfertaComponent implements OnInit {
 export class DialogServicios {
 
   constructor(
-    @Inject (MAT_DIALOG_DATA) public servicio: Servicio
-  ){
+    @Inject(MAT_DIALOG_DATA) public servicio: Servicio
+  ) {
   }
 
 }
@@ -143,7 +209,19 @@ export class DialogServicios {
 export class DialogHacedores {
 
   constructor(
-    @Inject (MAT_DIALOG_DATA) public hacedor: Hacedor
-  ){console.log(hacedor);
+    @Inject(MAT_DIALOG_DATA) public hacedor: Hacedor
+  ) {
+  }
+}
+
+@Component({
+  selector: 'dialogOfertas',
+  templateUrl: 'dialogOferta.html',
+})
+export class DialogOfertas {
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public ofertaAcept: OfertasAcep
+  ) {
   }
 }

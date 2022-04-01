@@ -15,6 +15,7 @@ export class HacedorHabilidadService {
 
   registrar(habilidad: EnvHabilidad){
     return this.http.post<EnvHabilidad>(`${this.api_url}/registrar`, habilidad)
-    .subscribe(data => console.log(data));
+    .subscribe(data => data // console.log(data)
+    );
   }
 }
