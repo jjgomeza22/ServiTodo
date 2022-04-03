@@ -37,6 +37,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient) { }
 
+
   login(email: string){
     return this.http.get<Cliente>(`${this.api_url}/auth?email=${email}`)
     .pipe(
@@ -48,8 +49,6 @@ export class ClienteService {
   }
 
   registrar(newCliente: CrearCliente){
-    return this.http.post<Cliente>(`${this.api_url}/registrar`, newCliente)
-    .subscribe(data => data //console.log(data)
-    );
+    return this.http.post<Cliente | null>(`${this.api_url}/registrar`, newCliente);
   }
 }

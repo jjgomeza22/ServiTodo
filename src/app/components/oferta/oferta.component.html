@@ -1,72 +1,159 @@
-<div class="container-formulario-ingresar">
-  <div class="container-formulario">
-    <h2>Solicitar Oferta</h2>
-    <form [formGroup]="form" class="formulario-ingresar">
-      <!-- direccion field -->
-      <mat-form-field appearance="outline">
-        <mat-label>Ingresa tu dirección</mat-label>
-        <input id="direccion" matInput formControlName="direccion">
-      </mat-form-field>
+<div class="container-all">
+  <button mat-icon-button class="logOut" (click)="logOut()">
+    <mat-icon aria-hidden="false" aria-label="Example home icon"
+      >exit_to_app</mat-icon
+    >Cerrar Sesión
+  </button>
 
-      <!-- Habilitar oferta -->
-      <mat-form-field appearance="outline">
-        <mat-label>Habilitar oferta</mat-label>
-        <mat-select [formControlName]="'habilitar'">
-          <mat-option value="habilitar">Habilitar</mat-option>
-          <mat-option value="deshabilitar">Deshabilitar</mat-option>
-        </mat-select>
-      </mat-form-field>
+  <div class="container-formulario-ingresar">
+    <div class="container-formulario">
+      <h2>Solicitar Oferta</h2>
+      <form [formGroup]="form" class="formulario-ingresar">
+        <!-- direccion field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Ingresa tu dirección</mat-label>
+          <input id="direccion" matInput formControlName="direccion" />
+          <mat-error>
+            <span>El campo dirección es requerido</span>
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Fecha -->
-      <mat-form-field appearance="outline">
-        <mat-label>Fecha</mat-label>
-        <input id="fecha" matInput type="datetime-local" [formControlName]="'fecha'">
-      </mat-form-field>
+        <!-- Habilitar oferta -->
+        <mat-form-field appearance="outline">
+          <mat-label>Habilitar oferta</mat-label>
+          <mat-select [formControlName]="'habilitar'">
+            <mat-option value="habilitar">Habilitar</mat-option>
+            <mat-option value="deshabilitar">Deshabilitar</mat-option>
+          </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Fecha -->
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input
+            id="fecha"
+            matInput
+            type="datetime-local"
+            [formControlName]="'fecha'"
+          />
+          <mat-error>
+            <span>El campo fecha es requerido</span>
+          </mat-error>
+        </mat-form-field>
 
         <!-- Precio -->
         <mat-form-field appearance="outline">
           <mat-label>Precio</mat-label>
-          <input id="precio" matInput type="number" [formControlName]="'precio'">
+          <input
+            id="precio"
+            matInput
+            type="number"
+            [formControlName]="'precio'"
+          />
+          <mat-error>
+            <span>El campo precio es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Selecciona el servicio requerido</mat-label>
           <mat-select [formControlName]="'servicio'">
-            <mat-option [value]="servicio.nombre" *ngFor="let servicio of servicios">{{servicio.nombre}}</mat-option>
+            <mat-option
+              [id]="servicio.servicioID"
+              [value]="servicio.nombre"
+              *ngFor="let servicio of servicios"
+              >{{ servicio.nombre }}</mat-option
+            >
           </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
         </mat-form-field>
 
-      <button mat-raised-button type="submit" (click)="enviarOferta()">Enviar</button>
-    </form>
-  </div>
-  <div class="container-servicios-hacedores">
-    <h2>Ver detalles</h2>
-    <form [formGroup]="formCon" class="formulario-ingresar">
-      <mat-form-field appearance="outline">
-        <mat-label>Selecciona el hacedor a inspeccionar</mat-label>
-        <mat-select [formControlName]="'hacedor'">
-          <mat-option [value]="hacedor.hacedorID" *ngFor="let hacedor of hacedores">{{hacedor.nombre}} {{hacedor.apellido}} {{hacedor.hacedorID}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button class="button-lina" mat-raised-button (click)="openDialogHacedores()">Consultar Hacedor</button>
-    </form>
-    <form [formGroup]="formCon1" class="formulario-ingresar">
-      <mat-form-field appearance="outline">
-        <mat-label>Selecciona el servicio a inspeccionar</mat-label>
-        <mat-select [formControlName]="'servicioCon'">
-          <mat-option [value]="servicio.servicioID" *ngFor="let servicio of servicios">{{servicio.nombre}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button class="button-lina" mat-raised-button (click)="openDialogService()">Consultar Servicio</button>
-    </form>
-    <form [formGroup]="formCon2" class="formulario-ingresar">
-      <mat-form-field appearance="outline">
-        <mat-label>Selecciona el servicio aceptado a inspeccionar</mat-label>
-        <mat-select [formControlName]="'serviciosAceptados'">
-          <mat-option [value]="oferta.ofertaID" *ngFor="let oferta of ofertasMos">{{oferta.nombre}} {{oferta.ofertaID}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-raised-button (click)="openDialogServiciosAceptados()">Consultar Servicio Aceptado</button>
-    </form>
+        <button mat-raised-button type="submit" (click)="enviarOferta()" id="button0" [disabled]="form.invalid">
+          Enviar
+        </button>
+      </form>
+    </div>
+    <div class="container-servicios-hacedores">
+      <h2>Ver detalles</h2>
+      <form [formGroup]="formCon" class="formulario-ingresar">
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona el hacedor a inspeccionar</mat-label>
+          <mat-select [formControlName]="'hacedor'" id="form1">
+            <mat-option
+            [id]="hacedor.hacedorID"
+              [value]="hacedor.hacedorID"
+              *ngFor="let hacedor of hacedores"
+              >{{ hacedor.nombre }} {{ hacedor.apellido }}
+              {{ hacedor.hacedorID }}</mat-option
+            >
+          </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
+        </mat-form-field>
+        <button
+          class="button-lina"
+          id="button1"
+          mat-raised-button
+          (click)="openDialogHacedores()"
+          [disabled]="formCon.invalid"
+        >
+          Consultar Hacedor
+        </button>
+      </form>
+      <form [formGroup]="formCon1" class="formulario-ingresar">
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona el servicio a inspeccionar</mat-label>
+          <mat-select [formControlName]="'servicioCon'" id="form2">
+            <mat-option
+            [id]="servicio.servicioID"
+              [value]="servicio.servicioID"
+              *ngFor="let servicio of servicios"
+              >{{ servicio.nombre }}</mat-option
+            >
+          </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
+        </mat-form-field>
+        <button
+          class="button-lina"
+          id="button2"
+          mat-raised-button
+          (click)="openDialogService()"
+          [disabled]="formCon1.invalid"
+        >
+          Consultar Servicio
+        </button>
+      </form>
+      <form
+        [formGroup]="formCon2"
+        class="formulario-ingresar"
+        *ngIf="actServicio"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Selecciona el servicio aceptado a inspeccionar</mat-label>
+          <mat-select [formControlName]="'serviciosAceptados'" id="form3">
+            <mat-option
+              [value]="oferta.ofertaID"
+              *ngFor="let oferta of ofertasMos"
+              >{{ oferta.nombre }} {{ oferta.ofertaID }}</mat-option
+            >
+          </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button (click)="openDialogServiciosAceptados()" id="button3" [disabled]="formCon2.invalid">
+          Consultar Servicio Aceptado
+        </button>
+      </form>
+      <h2 *ngIf="!actServicio">No tienes ofertas aceptadas</h2>
+    </div>
   </div>
 </div>

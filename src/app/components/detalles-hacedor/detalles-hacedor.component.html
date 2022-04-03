@@ -1,5 +1,12 @@
 <div class="detallesHacedor-container-grid">
-  <h2>Registrar Detalles Hacedor</h2>
+  <div class="header-container">
+    <h2>Registrar Detalles Hacedor</h2>
+    <button mat-icon-button class="logOut" (click)="logOut()">
+      <mat-icon aria-hidden="false" aria-label="Example home icon"
+        >exit_to_app</mat-icon
+      >Cerrar Sesión
+    </button>
+  </div>
   <div class="detallesHacedor-container">
     <div class="detallesHacedor-container-form">
       <form [formGroup]="formDetalles" class="formulario-detalles">
@@ -16,6 +23,9 @@
             matInput
             formControlName="numeroContacto"
           />
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- hacedor: Rango de trabajo -->
@@ -27,8 +37,11 @@
             formControlName="rangoTrabajo"
             type="text"
           />
+          <mat-error>
+            <span>El campo rango de trabajo es requerido</span>
+          </mat-error>
         </mat-form-field>
-        <button mat-raised-button type="submit" [disabled]="actForm" (click)="actDatos()">Actualizar Datos</button>
+        <button id="actDatos" mat-raised-button type="submit" [disabled]="actForm" (click)="actDatos()">Actualizar Datos</button>
       </form>
     </div>
     <div class="detallesHacedor-container-habilidades">
@@ -38,15 +51,21 @@
         <mat-form-field appearance="outline">
           <mat-label>Selecciona la habilidad</mat-label>
           <mat-select [formControlName]="'habilidad'">
-            <mat-option [value]="habilidad.nombre" *ngFor="let habilidad of habilidads">{{habilidad.nombre}}</mat-option>
+            <mat-option [id]="habilidad.nombre" [value]="habilidad.nombre" *ngFor="let habilidad of habilidads">{{habilidad.nombre}}</mat-option>
           </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
         </mat-form-field>
-        <button mat-raised-button type="submit" (click)="enviarHabilidad()">Agregar Habilidad</button>
+        <button id="agregarHabilidad" mat-raised-button type="submit"
+        (click)="enviarHabilidad()"
+        [disabled]="formHabilidad.invalid"
+        >Agregar Habilidad</button>
       </form>
     </div>
     <div class="container-button">
       <p><strong>Da click en el boton "Ofertas" para conocer las ofertas disponibles</strong></p>
-      <button mat-raised-button type="button" (click)="irOfertas()">Ofertas</button>
+      <button id="ofertas" mat-raised-button type="button" (click)="irOfertas()">Ofertas</button>
     </div>
   </div>
 </div>

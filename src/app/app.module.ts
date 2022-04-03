@@ -17,9 +17,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { DialogHacedores, DialogServicios, OfertaComponent } from './components/oferta/oferta.component';
 import { DetallesHacedorComponent } from './components/detalles-hacedor/detalles-hacedor.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogActions, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { TablaOfertasComponent } from './components/tabla-ofertas/tabla-ofertas.component';
 import { VistaAdministradorComponent } from './components/vista-administrador/vista-administrador.component';
+import { DialogOfertaComponent } from './components/oferta/dialog-oferta/dialog-oferta.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { VistaAdministradorComponent } from './components/vista-administrador/vi
     DialogHacedores,
     DialogServicios,
     TablaOfertasComponent,
-    VistaAdministradorComponent
+    VistaAdministradorComponent,
+    DialogOfertaComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,10 +49,11 @@ import { VistaAdministradorComponent } from './components/vista-administrador/vi
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    MatDialogActions
+    MatSnackBarModule
   ],
   exports: [AuthComponent],
   providers: [],
+  entryComponents: [MatDialogModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

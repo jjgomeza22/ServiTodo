@@ -1,0 +1,9 @@
+<h1 mat-dialog-title><strong>Información del servicio aceptado:</strong> {{ofertaAcept.nombre}} {{ofertaAcept.ofertaID}}</h1>
+<div mat-dialog-content>
+  <span><strong>Descripción:</strong> {{ofertaAcept.descripcion}}<br> </span>
+  <span><strong>Precio:</strong> {{ofertaAcept.precio}}<br> </span>
+  <span><strong>Estado:</strong> {{(ofertaAcept.aceptada)?'aceptada':'rechazada'}}<br> </span>
+</div>
+<div style="place-content:end" mat-dialog-actions>
+  <button id="cerrar1" (click)="close()" mat-raised-button mat-dialog-close>Cerrar</button>
+</div>

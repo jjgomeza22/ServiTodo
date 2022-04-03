@@ -10,6 +10,13 @@
   justify-self: center;
   align-self: center;
 }
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
 .detallesHacedor-container-form{
 
   text-align-last: center;

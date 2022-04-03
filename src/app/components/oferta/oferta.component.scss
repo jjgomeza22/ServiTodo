@@ -1,3 +1,14 @@
+.container-all{
+  display: grid;
+  grid-template-rows: 10% 90%;
+}
+
+.container-all .logOut{
+  justify-self: end;
+  margin-right: 120px;
+  margin-top: 20px;
+}
+
 .container-formulario-ingresar {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -88,6 +88,12 @@ export class DetallesHacedorComponent implements OnInit {
     }
     this.formDetalles.controls['modificarDetalles'].setValue(false);
     this.hacedorService.registrarDetalles(this.detallesH, this.hacedorID);
+
+    this.formDetalles.get('numeroContacto').setValue('');
+    this.formDetalles.get('numeroContacto').markAsUntouched();
+
+    this.formDetalles.get('rangoTrabajo').setValue('');
+    this.formDetalles.get('rangoTrabajo').markAsUntouched();
   }
 
   habilidades(){
@@ -104,6 +110,8 @@ export class DetallesHacedorComponent implements OnInit {
       hacedorID: this.hacedorID
     }
     this.hacedorHabilidadService.registrar(this.hab)
+    this.formHabilidad.get('habilidad').setValue('');
+    this.formHabilidad.get('habilidad').markAsUntouched();
   }
 
   irOfertas(){
@@ -112,5 +120,9 @@ export class DetallesHacedorComponent implements OnInit {
         hacedorID: this.hacedorID
       }
     });
+  }
+
+  logOut(){
+    this.router.navigate(["/ingresar"], {});
   }
 }

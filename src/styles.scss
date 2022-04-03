@@ -6,3 +6,13 @@ body {
   margin: 0;
   background-color: rgb(88, 88, 88);
 }
+
+.toast{
+  background-color: rgb(54, 54, 54);
+  font-weight: 300;
+  text-align: center;
+  color: white;
+  display: flex !important;
+  place-content: center;
+}
+

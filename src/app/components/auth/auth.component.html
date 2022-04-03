@@ -8,22 +8,18 @@
             <mat-option value="cliente">Cliente</mat-option>
             <mat-option value="hacedor">Hacedor</mat-option>
           </mat-select>
+          <mat-error>
+            <span>Campo requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- Correo electronico -->
         <mat-form-field appearance="outline">
           <mat-label>Correo Electrónico</mat-label>
           <input id="email" matInput formControlName="email">
-          <!-- <mat-error
-              *ngIf="form.get('email').hasError('required')">
-              <mat-icon svgIcon="mat_solid:error_outline"></mat-icon>
-              <span>{{t('msg.emailRequired')}}</span>
+          <mat-error>
+            <span>El correo es requerido</span>
           </mat-error>
-          <mat-error
-              *ngIf="form.get('email').hasError('email')">
-              <mat-icon svgIcon="mat_solid:error_outline"></mat-icon>
-              <span>{{t('msg.signInValidEmail')}}</span>
-          </mat-error> -->
       </mat-form-field>
 
       <!-- Password field -->
@@ -36,7 +32,7 @@
               <span>La contraseña es requerida</span>
           </mat-error>
       </mat-form-field>
-      <button mat-raised-button type="submit" (click)="ingresar()">Ingresar</button>
+      <button mat-raised-button type="submit" (click)="ingresar()" [disabled]="form.invalid">Ingresar</button>
       </form>
     </div>
   </mat-tab>
@@ -50,24 +46,36 @@
             <mat-option value="cliente">Cliente</mat-option>
             <mat-option value="hacedor">Hacedor</mat-option>
           </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- Nombre -->
         <mat-form-field appearance="outline">
           <mat-label>Nombre</mat-label>
           <input id="nombre" matInput type="text" [formControlName]="'nombre'">
+          <mat-error>
+            <span>El nombre es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- Apellido -->
         <mat-form-field appearance="outline">
           <mat-label>Apellido</mat-label>
           <input id="apellido" matInput type="text" formControlName="apellido">
+          <mat-error>
+            <span>El apellido es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- Nombre Usuario -->
         <mat-form-field appearance="outline">
           <mat-label>Nombre de usuario</mat-label>
           <input id="nombreUsuario" matInput type="text" formControlName="nombreUsuario">
+          <mat-error>
+            <span>El nombre de usuario es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- Password field -->
@@ -85,20 +93,30 @@
         <mat-form-field appearance="outline">
           <mat-label>Correo Electrónico</mat-label>
           <input id="emailReg" matInput formControlName="emailReg" type="email">
+          <mat-error>
+            <span>El correo es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- Número de contacto -->
         <mat-form-field appearance="outline">
           <mat-label>Numero de contacto (cel)</mat-label>
-          <input id="numeroContacto" maxlength="10" matInput formControlName="numeroContacto">
+          <input maxlength="10" id="numeroContacto" matInput formControlName="numeroContacto">
+          <mat-error>
+            <span>El numero de contacto es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- dirección -->
         <mat-form-field appearance="outline">
-          <mat-label>Direccion (cel)</mat-label>
+          <mat-label>Direccion</mat-label>
           <input id="direccion" matInput formControlName="direccion" type="text">
+          <mat-error>
+            <span>La dirección es requerida</span>
+          </mat-error>
         </mat-form-field>
-
+      </form>
+      <form [formGroup]="formReg1" class="formulario-ingresar-reg">
         <!-- Hacedor: Disponibilidad -->
         <mat-form-field appearance="outline" *ngIf="activeH">
           <mat-label>Selecciona si estas disponible</mat-label>
@@ -106,15 +124,21 @@
             <mat-option value="disponible">Disponible</mat-option>
             <mat-option value="ocupado">Ocupado</mat-option>
           </mat-select>
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
         </mat-form-field>
 
         <!-- hacedor: Rango de trabajo -->
         <mat-form-field appearance="outline" *ngIf="activeH">
           <mat-label>Descripción de tu rango de trabajo</mat-label>
           <input id="rangoTrabajo" matInput formControlName="rangoTrabajo" type="text">
+          <mat-error>
+            <span>El campo es requerido</span>
+          </mat-error>
         </mat-form-field>
 
-      <button mat-raised-button type="submit" [disabled]="formReg.invalid" (click)="registrar()">Registrarse</button>
+        <button mat-raised-button type="submit" [disabled]="formReg.invalid" (click)="registrar()">Registrarse</button>
       </form>
     </div>
   </mat-tab>

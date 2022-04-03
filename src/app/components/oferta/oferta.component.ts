@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Oferta, OfertasAcep, SolicitudOferta } from 'src/app/models/oferta.model';
 import { Servicio } from 'src/app/models/servicio.model';
 import { ServicioService } from '../../services/servicio.service'
@@ -11,6 +11,9 @@ import { HacedorService } from 'src/app/services/hacedor.service';
 import { Hacedor } from 'src/app/models/hacedor.model';
 import { HabilidadService } from '../../services/habilidad.service';
 import { Habilidad } from 'src/app/models/habilidad.model';
+import { DialogOfertaComponent } from './dialog-oferta/dialog-oferta.component';
+
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -19,6 +22,8 @@ import { Habilidad } from 'src/app/models/habilidad.model';
   styleUrls: ['./oferta.component.scss']
 })
 export class OfertaComponent implements OnInit {
+
+  actServicio: boolean = true;
 
   form: FormGroup;
   formCon: FormGroup;
@@ -64,7 +69,9 @@ export class OfertaComponent implements OnInit {
     private clienteService: ClienteService,
     private habilidadService: HabilidadService,
     private activatedRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar,
     private dialog: MatDialog,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -89,7 +96,7 @@ export class OfertaComponent implements OnInit {
     });
 
     this.consultarServicios();
-    this.clienteID = this.activatedRoute.snapshot.queryParamMap.get("clienteID");
+    this.clienteID = parseInt(this.activatedRoute.snapshot.queryParamMap.get("clienteID"));
 
     this.traerHacedores();
     this.habilidades();
@@ -110,6 +117,14 @@ export class OfertaComponent implements OnInit {
     this.dialog.open(DialogHacedores, {
       data: this.hacedor
     });
+
+    this.formCon.get('hacedor').setValue('');
+    this.formCon.get('hacedor').markAsUntouched();
+
+  }
+
+  logOut(){
+    this.router.navigate(["/ingresar"], {});
   }
 
   openDialogService() {
@@ -122,15 +137,20 @@ export class OfertaComponent implements OnInit {
     this.dialog.open(DialogServicios, {
       data: servicio,
     });
+    this.formCon1.get('servicioCon').setValue('');
+    this.formCon1.get('servicioCon').markAsUntouched();
   }
 
   openDialogServiciosAceptados() {
     const ofertaAceptID = this.formCon2.get('serviciosAceptados')?.value;
     const ofertaAcept = this.ofertasMos.find(oferta => oferta.ofertaID === ofertaAceptID);
 
-    this.dialog.open(DialogOfertas, {
+    this.dialog.open(DialogOfertaComponent, {
       data: ofertaAcept,
     });
+
+    this.formCon2.get('serviciosAceptados').setValue('');
+    this.formCon2.get('serviciosAceptados').markAsUntouched();
   }
 
   consultarServicios() {
@@ -142,6 +162,7 @@ export class OfertaComponent implements OnInit {
   }
 
   enviarOferta() {
+    this.openSnackBar('Oferta enviada exitosamente')
     const servi = this.servicios.find(servicio => servicio.nombre === this.form.get('servicio')?.value);
 
     const oferta: SolicitudOferta = {
@@ -156,6 +177,22 @@ export class OfertaComponent implements OnInit {
     // console.log(oferta);
 
     this.ofertaService.registar(oferta);
+
+    this.form.get('direccion').setValue('')
+    this.form.get('direccion').markAsUntouched();
+
+    this.form.get('habilitar').setValue('')
+    this.form.get('habilitar').markAsUntouched();
+
+    this.form.get('fecha').setValue('')
+    this.form.get('fecha').markAsUntouched();
+
+    this.form.get('precio').setValue('')
+    this.form.get('precio').markAsUntouched();
+
+    this.form.get('servicio').setValue('')
+    this.form.get('servicio').markAsUntouched();
+
   }
 
   traerHacedores() {
@@ -174,18 +211,29 @@ export class OfertaComponent implements OnInit {
 
       })
   }
+  openSnackBar(text) {
+    this._snackBar.open(text, '', {
+      duration: 1 * 2200,
+      panelClass: ['toast']
+    })
+  }
 
   findServiciosById() {
 
+    const exist =  this.ofertasAcept.find(oferta => oferta.clienteID === this.clienteID);
+    this.actServicio = (exist != undefined)?true: false;
+
     this.ofertasAcept.forEach(oferta => {
       const change = this.servicios.find(servicio => servicio.servicioID === oferta.servicioID);
-      this.ofertasMos.push({
-        nombre: change.nombre,
-        descripcion: change.descripcion,
-        ofertaID: oferta.ofertaID,
-        precio: oferta.precio,
-        aceptada: oferta.aceptado
-      })
+      if (oferta.clienteID == this.clienteID) {
+        this.ofertasMos.push({
+          nombre: change.nombre,
+          descripcion: change.descripcion,
+          ofertaID: oferta.ofertaID,
+          precio: oferta.precio,
+          aceptada: oferta.aceptado
+        })
+      }
     });
   }
 }
@@ -214,14 +262,4 @@ export class DialogHacedores {
   }
 }
 
-@Component({
-  selector: 'dialogOfertas',
-  templateUrl: 'dialogOferta.html',
-})
-export class DialogOfertas {
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public ofertaAcept: OfertasAcep
-  ) {
-  }
-}

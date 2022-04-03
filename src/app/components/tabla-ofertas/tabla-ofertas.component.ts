@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AceptOferta, Oferta } from 'src/app/models/oferta.model';
 import { Servicio } from 'src/app/models/servicio.model';
 import { HacedorService } from 'src/app/services/hacedor.service';
 import { ServicioService } from 'src/app/services/servicio.service';
-import {OfertaService} from '../../services/oferta.service'
+import { OfertaService } from '../../services/oferta.service'
 
 @Component({
   selector: 'app-tabla-ofertas',
   templateUrl: './tabla-ofertas.component.html',
   styleUrls: ['./tabla-ofertas.component.scss']
 })
-export class TablaOfertasComponent implements OnInit {
+export class TablaOfertasComponent implements OnInit, AfterContentInit {
 
   ofertas: Oferta[] = [];
   servicios: Servicio[] = [];
@@ -22,46 +22,58 @@ export class TablaOfertasComponent implements OnInit {
     private ofertaService: OfertaService,
     private servicioService: ServicioService,
     private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    // this.traerOfertas();
+    // this.traerServicios();
+    // this.hacedorID = this.activatedRoute.snapshot.queryParamMap.get("hacedorID");
+  }
+
+  ngAfterContentInit(): void {
     this.traerOfertas();
     this.traerServicios();
-    // this.findServiciosById();
     this.hacedorID = this.activatedRoute.snapshot.queryParamMap.get("hacedorID");
   }
-  traerOfertas(){
+
+  traerOfertas() {
     this.ofertaService.ofertasHacedores()
-    .subscribe(data => {
-      this.ofertas = data;
-      // console.log(this.ofertas);
-
-    });
+      .subscribe(data => {
+        if (data) {
+          this.ofertas = data;
+        }
+      });
   }
 
-  traerServicios(){
+  traerServicios() {
     this.servicioService.servicios()
-    .subscribe(data => {
-      this.servicios = data;
-      // console.log(this.servicios);
-      this.findServiciosById();
-    });
+      .subscribe(data => {
+        if (data) {
+          this.servicios = data;
+          // console.log(this.servicios);
+          this.findServiciosById();
+        }
+      });
   }
 
-  findServiciosById(){
-
+  findServiciosById() {
+    const ids: Number[] = [];
+    var i: number = 0;
     this.ofertas.forEach(oferta => {
       const change = this.servicios.find(servicio => servicio.servicioID === oferta.servicioID);
       this.ofertasMos.push({
         nombre: change?.nombre,
         descripcion: change?.descripcion,
         ofertaID: oferta.ofertaID,
-        precio: oferta.precio
+        precio: oferta.precio,
+        botonID: i++
       })
     });
+
   }
 
-  aceptarOferta(ofertaID: number){
+  aceptarOferta(ofertaID: number) {
     const aceptOfert: AceptOferta = {
       hacedorID: this.hacedorID,
       aceptado: true
@@ -73,8 +85,16 @@ export class TablaOfertasComponent implements OnInit {
     this.ofertasMos.splice(ofertaDelete, 1);
   }
 
-  rechazarOferta(ofertaID: number){
+  rechazarOferta(ofertaID: number) {
     const ofertaDelete = this.ofertasMos.findIndex(oferta => oferta.ofertaID === ofertaID);
     this.ofertasMos.splice(ofertaDelete, 1);
+  }
+
+  back(){
+    this.router.navigate(["/detalles-hacedor"], {
+      queryParams:{
+        hacedorID: this.hacedorID
+      }
+    });
   }
 }

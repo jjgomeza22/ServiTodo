@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,9 @@ import { Cliente, CrearCliente } from 'src/app/models/cliente.model';
 import { CrearHacedor, Hacedor } from 'src/app/models/hacedor.model';
 import { ClienteService } from '../../services/cliente.service';
 import { HacedorService } from '../../services/hacedor.service';
+
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 
 @Component({
@@ -15,6 +18,8 @@ import { HacedorService } from '../../services/hacedor.service';
 })
 export class AuthComponent implements OnInit {
 
+  actToast = false;
+
   @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
   form!: FormGroup;
   rol: string = '';
@@ -23,6 +28,7 @@ export class AuthComponent implements OnInit {
   activeH: boolean = false;
 
   formReg!: FormGroup;
+  formReg1!: FormGroup;
   selectI: number = 0;
 
   cliente: Cliente = {
@@ -82,6 +88,7 @@ export class AuthComponent implements OnInit {
     private clienteService: ClienteService,
     private hacedorService: HacedorService,
     private activatedRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar,
     private router: Router
   ) { }
 
@@ -102,8 +109,11 @@ export class AuthComponent implements OnInit {
       emailReg: ['', [Validators.required, Validators.email]],
       numeroContacto: ['', Validators.required],
       direccion: ['', Validators.required],
-      disponibilidad: [''],
-      rangoTrabajo: [''],
+    });
+
+    this.formReg1 = this.formBuilder.group({
+      disponibilidad: ['', Validators.required],
+      rangoTrabajo: ['', Validators.required],
     });
   }
 
@@ -111,7 +121,18 @@ export class AuthComponent implements OnInit {
     this.activeH = (event === 'hacedor') ? true : false;
   }
 
+
+  openSnackBar(text) {
+    this._snackBar.open(text, '', {
+      duration: 1 * 2200,
+      panelClass: ['toast']
+    })
+  }
+
   ingresar(): void {
+
+    this.actToast = !this.actToast;
+
     this.email = this.form.get('email')?.value;
     this.password = this.form.get('password')?.value;
     this.rol = this.form.get('rol')?.value;
@@ -126,6 +147,9 @@ export class AuthComponent implements OnInit {
                 clienteID: data.clienteID
               }
             });
+            this.openSnackBar('Bienvenido ' + data.nombre)
+          } else {
+            this.openSnackBar('Usuario o contraseña incorrectos')
           }
         });
     }
@@ -139,6 +163,9 @@ export class AuthComponent implements OnInit {
                 hacedorID: data.hacedorID
               }
             });
+            this.openSnackBar('Bienvenido ' + data.nombre)
+          } else {
+            this.openSnackBar('Usuario o contraseña incorrectos')
           }
         });
     }
@@ -156,7 +183,23 @@ export class AuthComponent implements OnInit {
       numeroContacto: this.formReg.get('numeroContacto')?.value,
     }
     if (this.formReg.get('rolReg')?.value === 'cliente') {
-      this.clienteService.registrar(this.newCliente);
+      this.clienteService.registrar(this.newCliente)
+        .subscribe(data => {
+
+          if (data) {
+            // console.log(data);
+          } else{
+            // console.log("Holi");
+
+          }
+
+
+          // if(data){
+          //   this.openSnackBar('Usuario ya existente.');
+          // }else {
+          //   this.openSnackBar('Usuario Registrado Correctamente.')
+          // }
+        });
     }
 
     this.newHacedor = {
@@ -167,12 +210,13 @@ export class AuthComponent implements OnInit {
       email: this.formReg.get('emailReg')?.value,
       numeroContacto: this.formReg.get('numeroContacto')?.value,
       direccion: this.formReg.get('direccion')?.value,
-      disponibilidad: (this.formReg.get('disponibilidad')?.value === 'disponible') ? true : false,
-      rangoTrabajo: this.formReg.get('rangoTrabajo')?.value,
+      disponibilidad: (this.formReg1.get('disponibilidad')?.value === 'disponible') ? true : false,
+      rangoTrabajo: this.formReg1.get('rangoTrabajo')?.value,
     }
     if (this.formReg.get('rolReg')?.value === 'hacedor') {
       // console.log(this.newHacedor);
       this.hacedorService.registrar(this.newHacedor);
+      this.openSnackBar('Usuario Registrado Correctamente.')
     }
     this.tabGroup.selectedIndex = 0;
   }

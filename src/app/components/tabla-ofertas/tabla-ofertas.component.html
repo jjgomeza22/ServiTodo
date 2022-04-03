@@ -1,4 +1,7 @@
 <div class="principal-container">
+  <button class="atras" (click)="back()">
+    <mat-icon>keyboard_backspace</mat-icon>
+  </button>
   <div class="table-container">
     <table>
       <thead class="head-table">
@@ -24,10 +27,10 @@
           <td>{{oferta.precio}}</td>
           <td>
             <div class="container-button">
-              <button mat-icon-button (click)="aceptarOferta(oferta.ofertaID)">
+              <button [id]="oferta.botonID" class="acept" mat-icon-button (click)="aceptarOferta(oferta.ofertaID)">
                 <mat-icon> check_circle</mat-icon>
               </button>
-              <button mat-icon-button (click)="rechazarOferta(oferta.ofertaID)">
+              <button [id]="oferta.botonID" class="discard" mat-icon-button (click)="rechazarOferta(oferta.ofertaID)">
                 <mat-icon> cancel</mat-icon>
               </button>
             </div>
